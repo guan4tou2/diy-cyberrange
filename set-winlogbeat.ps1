@@ -34,5 +34,7 @@ Write-Host "Replacing <HELK-IP> in winlogbeat.yml..."
 Write-Host "Installing Winlogbeat as a service..."
 Set-Location -Path $winlogbeatDir
 .\install-service-winlogbeat.ps1
+start-service winlogbeat
+get-service winlogbeat
 
 Write-Host "All steps completed successfully!"
