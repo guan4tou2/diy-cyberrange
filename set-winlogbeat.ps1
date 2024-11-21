@@ -1,3 +1,5 @@
+$ProgressPreference = 'SilentlyContinue'
+
 # Set variables
 $winlogbeatUrl = "https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-8.14.2-windows-x86_64.zip"
 $winlogbeatConfigUrl = "https://raw.githubusercontent.com/Cyb3rWard0g/HELK/refs/heads/master/configs/winlogbeat/winlogbeat.yml"
