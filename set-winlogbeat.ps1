@@ -1,36 +1,36 @@
-# 設定變數
+# Set variables
 $winlogbeatUrl = "https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-8.14.2-windows-x86_64.zip"
 $winlogbeatConfigUrl = "https://raw.githubusercontent.com/Cyb3rWard0g/HELK/refs/heads/master/configs/winlogbeat/winlogbeat.yml"
 $winlogbeatZip = "winlogbeat.zip"
 $winlogbeatDir = "winlogbeat-8.14.2-windows-x86_64"
 
-# 要求使用者輸入 IP
-$helkIp = Read-Host "請輸入 HELK 的 IP 位址"
+# Prompt the user to input HELK IP
+$helkIp = Read-Host "Please enter the IP address of the HELK server"
 
-# 驗證 IP 格式
+# Validate IP format
 if ($helkIp -notmatch "^([0-9]{1,3}\.){3}[0-9]{1,3}$") {
-    Write-Host "IP 位址格式不正確，請重新執行腳本並輸入正確的 IP 位址。" -ForegroundColor Red
+    Write-Host "Invalid IP address format. Please rerun the script and enter a valid IPv4 address." -ForegroundColor Red
     exit
 }
 
-# 1. 下載並解壓縮 winlogbeat
-Write-Host "下載 winlogbeat 壓縮檔..."
+# 1. Download and extract Winlogbeat
+Write-Host "Downloading Winlogbeat zip file..."
 Invoke-WebRequest -Uri $winlogbeatUrl -OutFile $winlogbeatZip
 
-Write-Host "解壓縮 winlogbeat 壓縮檔..."
+Write-Host "Extracting Winlogbeat zip file..."
 Expand-Archive -Path $winlogbeatZip -DestinationPath "." -Force
 
-# 2. 下載 winlogbeat.yml
-Write-Host "下載 winlogbeat.yml 配置檔案..."
+# 2. Download winlogbeat.yml
+Write-Host "Downloading winlogbeat.yml configuration file..."
 Invoke-WebRequest -Uri $winlogbeatConfigUrl -OutFile "$winlogbeatDir\winlogbeat.yml"
 
-# 3. 替換 winlogbeat.yml 中的 <HELK-IP>
-Write-Host "替換 winlogbeat.yml 中的 <HELK-IP>..."
+# 3. Replace <HELK-IP> in winlogbeat.yml
+Write-Host "Replacing <HELK-IP> in winlogbeat.yml..."
 (Get-Content -Path "$winlogbeatDir\winlogbeat.yml") -replace "<HELK-IP>", $helkIp | Set-Content -Path "$winlogbeatDir\winlogbeat.yml"
 
-# 4. 安裝 winlogbeat 作為服務
-Write-Host "執行 winlogbeat 安裝腳本..."
+# 4. Install Winlogbeat as a service
+Write-Host "Installing Winlogbeat as a service..."
 Set-Location -Path $winlogbeatDir
 .\install-service-winlogbeat.ps1
 
-Write-Host "完成所有步驟！"
+Write-Host "All steps completed successfully!"
